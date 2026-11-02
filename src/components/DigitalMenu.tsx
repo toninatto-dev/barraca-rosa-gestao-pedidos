@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { menuItems, categories } from '@/data/menu';
+import { Loader2 } from 'lucide-react';
+import { categories } from '@/data/menu';
+import { useMenuItems } from '@/hooks/useMenuItems';
 import type { CartItem, MenuItem } from '@/types';
 import { MenuCard } from './MenuCard';
 
@@ -13,8 +15,9 @@ export function DigitalMenu({ cart, onAdd, onRemove }: DigitalMenuProps) {
   const [activeCategory, setActiveCategory] = useState<string>(
     categories[0]
   );
+  const { items, loading, error } = useMenuItems();
 
-  const filtered = menuItems.filter((i) => i.category === activeCategory);
+  const filtered = items.filter((i) => i.category === activeCategory);
 
   return (
     <section aria-label="Cardápio Digital" className="mx-auto max-w-5xl px-4">
@@ -38,17 +41,29 @@ export function DigitalMenu({ cart, onAdd, onRemove }: DigitalMenuProps) {
         ))}
       </nav>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((item) => (
-          <MenuCard
-            key={item.id}
-            item={item}
-            cart={cart}
-            onAdd={onAdd}
-            onRemove={onRemove}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center py-12 text-[#D10068]">
+          <Loader2 className="h-6 w-6 animate-spin" aria-label="Carregando cardápio" />
+        </div>
+      ) : error ? (
+        <p className="py-12 text-center text-sm text-[#D10068]">{error}</p>
+      ) : filtered.length === 0 ? (
+        <p className="py-12 text-center text-sm text-[#9D174D]/70">
+          Nenhum item nesta categoria no momento.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((item) => (
+            <MenuCard
+              key={item.id}
+              item={item}
+              cart={cart}
+              onAdd={onAdd}
+              onRemove={onRemove}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
