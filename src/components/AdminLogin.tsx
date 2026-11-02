@@ -2,6 +2,8 @@ import { useState, type FormEvent } from 'react';
 import { Loader2, Lock } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
+const ADMIN_EMAIL_DOMAIN = 'barracarosa.com.br';
+
 export function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,8 +14,9 @@ export function AdminLogin() {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
+    const login = email.trim().toLowerCase();
     const { error: err } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
+      email: login.includes('@') ? login : `${login}@${ADMIN_EMAIL_DOMAIN}`,
       password,
     });
     if (err) {
@@ -43,9 +46,11 @@ export function AdminLogin() {
         </div>
 
         <label className="flex flex-col gap-1 text-sm font-semibold text-[#9D174D]">
-          Usuário (e-mail)
+          Usuário
           <input
-            type="email"
+            type="text"
+            autoCapitalize="none"
+            spellCheck={false}
             required
             autoComplete="username"
             value={email}
