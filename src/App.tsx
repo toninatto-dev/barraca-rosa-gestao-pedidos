@@ -1,12 +1,12 @@
-import  useState  from 'react';
-import  Header  from '@/components/Header';
-import  Footer  from '@/components/Footer';
-import  TabSwitcher  from '@/components/TabSwitcher';
-import  DigitalMenu  from '@/components/DigitalMenu';
-import  FloatingCart  from '@/components/FloatingCart';
-import  CheckoutModal from '@/components/CheckoutModal';
-import  AdminPanel  from '@/components/AdminPanel';
-import  useCart  from '@/hooks/useCart';
+import  { useState }  from 'react';
+import  { Header }  from '@/components/Header';
+import  { Footer }  from '@/components/Footer';
+import  { TabSwitcher }  from '@/components/TabSwitcher';
+import  { DigitalMenu }  from '@/components/DigitalMenu';
+import  { FloatingCart }  from '@/components/FloatingCart';
+import  { CheckoutModal } from '@/components/CheckoutModal';
+import  { AdminPanel }  from '@/components/AdminPanel';
+import  { useCart }  from '@/hooks/useCart';
 import type  TabType, CartItem  from '@/types';
 
 function App() {

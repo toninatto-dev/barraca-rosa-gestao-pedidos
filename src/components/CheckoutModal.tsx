@@ -284,3 +284,4 @@ Obrigada pelo pedido! ♡`;
     </div>
   );
 }
+export default CheckoutModal;
