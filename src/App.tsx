@@ -7,7 +7,7 @@ import  { FloatingCart }  from '@/components/FloatingCart';
 import  { CheckoutModal } from '@/components/CheckoutModal';
 import  { AdminPanel }  from '@/components/AdminPanel';
 import  { useCart }  from '@/hooks/useCart';
-import type  { TabType }, CartItem  from '@/types';
+import type  { TabType,  CartItem}  from '@/types';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('menu');
