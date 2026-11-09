@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import type { CartItem } from '@/types';
 import { formatCurrency } from '@/lib/cart';
+import { supabase } from '@/lib/supabase';
 
 interface CheckoutModalProps {
   open: boolean;
@@ -23,7 +24,7 @@ const checkoutSchema = z.object({
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
-const WHATSAPP_NUMBER = '5517981833365';
+const WHATSAPP_NUMBER = '5517999999999';
 
 export function CheckoutModal({
   open,
@@ -60,7 +61,27 @@ export function CheckoutModal({
 
   const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
-  const onSubmit = (data: CheckoutFormData) => {
+  const onSubmit = async (data: CheckoutFormData) => {
+    try {
+      // 1. Salva o pedido no banco de dados (Supabase)
+      const { error } = await supabase.from('orders').insert([
+        {
+          customer_name: data.customerName,
+          items: cart,
+          total: total,
+          notes: data.notes || '',
+          status: 'Pendente',
+        },
+      ]);
+
+      if (error) {
+        console.error('Erro ao salvar no Supabase:', error);
+      }
+    } catch (err) {
+      console.error('Erro inesperado:', err);
+    }
+
+    // 2. Prepara e abre o link do WhatsApp
     const lines = cart.map(
       (i) => `• ${i.quantity}x ${i.name} — ${formatCurrency(i.price * i.quantity)}`
     );
@@ -90,7 +111,7 @@ export function CheckoutModal({
       aria-label="Finalizar pedido"
     >
       <div
-        className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl bg-white shadow-2xl"
+        className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl bg-[#FFF0F5] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 flex items-center justify-between rounded-t-3xl bg-gradient-to-r from-[#D10068] to-[#E63970] px-6 py-4 text-white">
@@ -109,7 +130,7 @@ export function CheckoutModal({
 
         {submitted ? (
           <div className="px-6 py-12 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#FFF0F5] text-3xl text-[#D10068]">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white text-3xl text-[#D10068]">
               ♡
             </div>
             <h3 className="text-xl font-bold text-gray-800">
@@ -140,7 +161,7 @@ export function CheckoutModal({
                   {cart.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-3 rounded-xl border border-[#FBCFE8] bg-[#FFF0F5]/50 p-3"
+                      className="flex items-center gap-3 rounded-xl border border-[#FBCFE8] bg-white p-3"
                     >
                       <div className="flex-1">
                         <p className="text-sm font-bold text-gray-800">
@@ -190,7 +211,7 @@ export function CheckoutModal({
                   ))}
                 </div>
 
-                <div className="rounded-xl bg-[#FFF0F5] p-4 text-right">
+                <div className="rounded-xl bg-white p-4 text-right border border-[#FBCFE8]">
                   <span className="text-sm text-gray-600">Total: </span>
                   <span className="text-xl font-black text-[#D10068]">
                     {formatCurrency(total)}
@@ -209,7 +230,7 @@ export function CheckoutModal({
                     type="text"
                     {...register('customerName')}
                     placeholder="Digite seu nome"
-                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[#E63970] focus:outline-none"
+                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[#E63970] focus:outline-none bg-white"
                   />
                   {errors.customerName && (
                     <p className="mt-1 text-xs font-semibold text-red-500">
@@ -230,7 +251,7 @@ export function CheckoutModal({
                     type="tel"
                     {...register('phone')}
                     placeholder="(17) 99999-9999"
-                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[#E63970] focus:outline-none"
+                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[#E63970] focus:outline-none bg-white"
                   />
                   {errors.phone && (
                     <p className="mt-1 text-xs font-semibold text-red-500">
@@ -251,7 +272,7 @@ export function CheckoutModal({
                     {...register('notes')}
                     rows={2}
                     placeholder="Sem cebola, bem passado, etc."
-                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[#E63970] focus:outline-none resize-none"
+                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[#E63970] focus:outline-none resize-none bg-white"
                   />
                 </div>
 
@@ -271,4 +292,5 @@ export function CheckoutModal({
     </div>
   );
 }
+
 export default CheckoutModal;
