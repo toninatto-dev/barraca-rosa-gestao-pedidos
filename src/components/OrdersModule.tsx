@@ -1,8 +1,11 @@
+
+=======
 TypeScript
 import { useState, useEffect } from 'react';
 import { Clock, CheckCircle2, PackageCheck, AlertCircle, RefreshCw } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { formatCurrency } from '@/lib/cart';
+
 
 export interface OrderItem {
   id: string;
