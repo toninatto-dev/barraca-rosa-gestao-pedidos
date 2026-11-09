@@ -74,8 +74,7 @@ export function CheckoutModal({
 
 ` +
       `*Itens:*
-${lines.join('
-')}
+${lines.join('\n')}
 
 ` +
       `*Total: ${formatCurrency(total)}*
