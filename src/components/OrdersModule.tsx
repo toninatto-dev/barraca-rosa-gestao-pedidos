@@ -18,7 +18,7 @@ export function OrdersModule() {
   const fetchOrders = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('pedidos') // CONFIRME SE O NOME DA TABELA É 'pedidos' OU 'orders'
+        .from('orders') 
         .select('*')
         .order('created_at', { ascending: false });
 
