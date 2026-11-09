@@ -251,4 +251,24 @@ export function CheckoutModal({
                     {...register('notes')}
                     rows={2}
                     placeholder="Sem cebola, bem passado, etc."
-                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder
+                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[#E63970] focus:outline-none resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#D10068] px-6 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#E63970] hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#D10068]/30 active:scale-95 disabled:opacity-60"
+                >
+                  <Send className="h-4 w-4" aria-hidden="true" />
+                  {isSubmitting ? 'Enviando...' : 'Enviar Pedido pelo WhatsApp'}
+                </button>
+              </>
+            )}
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+export default CheckoutModal;
