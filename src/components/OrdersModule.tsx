@@ -1,11 +1,8 @@
-
-=======
 TypeScript
 import { useState, useEffect } from 'react';
-import { Clock, CheckCircle2, PackageCheck, AlertCircle, RefreshCw } from 'lucide-react';
+import { Clock, PackageCheck, AlertCircle, RefreshCw } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { formatCurrency } from '@/lib/cart';
-
 
 export interface OrderItem {
   id: string;
@@ -45,7 +42,6 @@ export function OrdersModule() {
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  // Busca os pedidos iniciais
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -57,7 +53,7 @@ export function OrdersModule() {
       if (error) {
         console.error('Erro ao buscar pedidos:', error);
       } else {
-        setOrders(data as Order[]);
+        setOrders((data as Order[]) || []);
       }
     } catch (err) {
       console.error('Erro inesperado:', err);
@@ -66,12 +62,10 @@ export function OrdersModule() {
     }
   };
 
-  // Atualiza o status no Supabase
   const handleStatusChange = async (orderId: string, newStatus: Order['status']) => {
     try {
       setUpdatingId(orderId);
 
-      // Atualização otimista no estado local
       setOrders((prev) =>
         prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
       );
@@ -83,7 +77,6 @@ export function OrdersModule() {
 
       if (error) {
         console.error('Erro ao atualizar status:', error);
-        // Reverte em caso de erro
         fetchOrders();
       }
     } catch (err) {
@@ -97,7 +90,6 @@ export function OrdersModule() {
   useEffect(() => {
     fetchOrders();
 
-    // Escuta novos pedidos e atualizações em tempo real
     const channel = supabase
       .channel('orders_realtime')
       .on(
@@ -115,7 +107,7 @@ export function OrdersModule() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-4xl p-4 sm:p-6 space-y-6">
+    <div className="mx-auto max-w-4xl p-4 sm:p-6 space-y-6 bg-white min-h-[60vh] rounded-3xl shadow-sm">
       <div className="flex items-center justify-between border-b border-pink-200 pb-4">
         <div>
           <h1 className="text-2xl font-black text-gray-800 flex items-center gap-2">
@@ -156,7 +148,6 @@ export function OrdersModule() {
               key={order.id}
               className="rounded-2xl border-2 border-[#FBCFE8] bg-white p-5 shadow-sm space-y-4 transition-all hover:shadow-md"
             >
-              {/* Cabeçalho do Card */}
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-3">
                 <div>
                   <h3 className="text-base font-bold text-gray-800">
@@ -168,10 +159,9 @@ export function OrdersModule() {
                   </p>
                 </div>
 
-                {/* Seletor de Status */}
                 <div className="flex items-center gap-2">
                   <select
-                    value={order.status}
+                    value={order.status || 'Pendente'}
                     disabled={updatingId === order.id}
                     onChange={(e) =>
                       handleStatusChange(
@@ -193,7 +183,6 @@ export function OrdersModule() {
                 </div>
               </div>
 
-              {/* Lista de Itens */}
               <div className="space-y-1.5">
                 <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Itens do Pedido
@@ -212,25 +201,23 @@ export function OrdersModule() {
                           {item.name}
                         </span>
                         <span className="font-semibold text-gray-600">
-                          {formatCurrency(item.price * item.quantity)}
+                          {formatCurrency((item.price || 0) * (item.quantity || 1))}
                         </span>
                       </div>
                     ))}
                 </div>
               </div>
 
-              {/* Observações */}
               {order.notes && (
                 <div className="text-xs text-gray-600 bg-yellow-50 border border-yellow-200 rounded-xl p-2.5">
                   <strong className="text-yellow-800">Obs:</strong> {order.notes}
                 </div>
               )}
 
-              {/* Rodapé com Total */}
               <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                 <span className="text-xs font-bold text-gray-500">Total</span>
                 <span className="text-lg font-black text-[#D10068]">
-                  {formatCurrency(order.total)}
+                  {formatCurrency(order.total || 0)}
                 </span>
               </div>
             </div>
