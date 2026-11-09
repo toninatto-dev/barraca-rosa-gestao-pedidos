@@ -96,3 +96,4 @@ export function OrdersModule() {
     </div>
   );
 }
+export default OrdersModule;
