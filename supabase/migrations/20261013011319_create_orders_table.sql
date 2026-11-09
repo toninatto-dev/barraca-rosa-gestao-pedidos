@@ -1,21 +1,4 @@
-/*
-# Create orders table for A BARRACA ROSA food trailer
 
-1. New Tables
-- `orders` — stores customer orders from the food trailer
-  - `id` (uuid, primary key)
-  - `customer_name` (text, not null) — name of the customer
-  - `items` (jsonb, not null) — array of {id, name, price, quantity, category}
-  - `total` (numeric, not null) — total order value in BRL
-  - `notes` (text) — optional customer observation
-  - `status` (text, not null, default 'Pendente') — order status: Pendente, Em Preparo, Concluido
-  - `created_at` (timestamptz, default now()) — when order was placed
-
-2. Security
-- Enable RLS on `orders`.
-- This is a no-auth single-tenant app (no sign-in screen).
-- Allow anon + authenticated CRUD because the data is intentionally shared/public.
-*/
 
 CREATE TABLE IF NOT EXISTS orders (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

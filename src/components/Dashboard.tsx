@@ -13,7 +13,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export function Dashboard({ orders }: DashboardProps) {
-  const completed = orders.filter((o) => o.status === 'Concluído');
+  const completed = orders.filter((o) => o.status === 'Entregue');
   const totalRevenue = completed.reduce((s, o) => s + o.total, 0);
   const totalOrders = completed.length;
   const avgTicket = totalOrders > 0 ? totalRevenue / totalOrders : 0;
