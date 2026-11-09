@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { X, ShoppingBag, Send, Trash2, Plus, Minus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,7 +23,7 @@ const checkoutSchema = z.object({
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
-const WHATSAPP_NUMBER = '5517999999999';
+const WHATSAPP_NUMBER = '5517981833365';
 
 export function CheckoutModal({
   open,
@@ -65,24 +65,13 @@ export function CheckoutModal({
       (i) => `• ${i.quantity}x ${i.name} — ${formatCurrency(i.price * i.quantity)}`
     );
     const msg =
-      `*Pedido — A BARRACA ROSA ♡*
-
-` +
-      `Cliente: ${data.customerName}
-` +
-      `Telefone/Contato: ${data.phone}
-
-` +
-      `*Itens:*
-${lines.join('\n')} 
-` +
-      `*Total: ${formatCurrency(total)}*
-` +
-      (data.notes?.trim() ? `
-Observação: ${data.notes}
-` : '') +
-      `
-Obrigada pelo pedido! ♡`;
+      `*Pedido — A BARRACA ROSA ♡*\n\n` +
+      `Cliente: ${data.customerName}\n` +
+      `Telefone/Contato: ${data.phone}\n\n` +
+      `*Itens:*\n${lines.join('\n')}\n\n` +
+      `*Total: ${formatCurrency(total)}*\n` +
+      (data.notes?.trim() ? `\nObservação: ${data.notes}\n` : '') +
+      `\nObrigada pelo pedido! ♡`;
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -262,24 +251,4 @@ Obrigada pelo pedido! ♡`;
                     {...register('notes')}
                     rows={2}
                     placeholder="Sem cebola, bem passado, etc."
-                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[#E63970] focus:outline-none resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#D10068] px-6 py-3.5 text-sm font-bold text-white transition-all hover:bg-[#E63970] hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#D10068]/30 active:scale-95 disabled:opacity-60"
-                >
-                  <Send className="h-4 w-4" aria-hidden="true" />
-                  {isSubmitting ? 'Enviando...' : 'Enviar Pedido pelo WhatsApp'}
-                </button>
-              </>
-            )}
-          </form>
-        )}
-      </div>
-    </div>
-  );
-}
-export default CheckoutModal;
+                    className="w-full rounded-xl border-2 border-[#FBCFE8] px-4 py-2.5 text-sm text-gray-800 placeholder
