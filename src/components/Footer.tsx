@@ -10,7 +10,7 @@ export function Footer() {
         </p>
         <div className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
-            href="https://wa.me/5517999999999"
+            href="https://wa.me/5517981833365"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-white/90 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30 rounded-full px-3 py-1"
