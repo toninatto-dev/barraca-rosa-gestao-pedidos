@@ -1,4 +1,4 @@
-TypeScript
+
 import { useState, useEffect } from 'react';
 import { Clock, PackageCheck, AlertCircle, RefreshCw } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
