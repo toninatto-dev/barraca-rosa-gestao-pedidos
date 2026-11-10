@@ -9,8 +9,8 @@ Projeto Integrador desenvolvido para otimização da gestão de atendimento, car
 
 ---
 # Acesso ao Painel do Administrador
-* **Usuário:** `thaislau` 
-* **Senha:** `admin1979`
+* **Usuário:** `admin` 
+* **Senha:** `abarracarosa123`
 
 
  
